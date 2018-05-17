@@ -11,20 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 //Make Connection
 function connection(){
   return(
-    mysqlssh.connect(
-      {
-          host: config.sshpw.host,
-          port: config.sshpw.port,
-          username: config.sshpw.username,
-          password: config.sshpw.password
-      },
-      {
-          host: config.sqlpw.host,
-          user: config.sqlpw.user,
-          password: config.sqlpw.password,
-          database: config.sqlpw.database
-      }
-    )
+    mysqlssh.connect(config.sshpw,config.sqlpw)
   );
 }
 
@@ -40,7 +27,7 @@ connection().then(client => {
   console.log(err)
 });
 
-//Listen to Port 
+//Listen to Port
 app.listen(3001, function() {
     console.log("Server running on 3001");
 });
