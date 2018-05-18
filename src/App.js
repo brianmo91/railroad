@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import { Route, Link, BrowserRouter } from 'react-router-dom';
-import './App.css';
-import logo from './logo.svg';
+import React, { Component } from "react";
+import { Route, Link, BrowserRouter } from "react-router-dom";
+import "./App.css";
+import logo from "./logo.svg";
 
-import Train from './Train';
+import Train from "./Train";
 
-class Routes extends Component{
-  render(){
-    return(
-      <Link to="/">Home</Link>
-    );
+class Routes extends Component {
+  render() {
+    return [
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/ticket">Ticket</Link>
+      </nav>
+    ];
   }
-
 }
-
 
 class App extends Component {
   render() {
@@ -23,9 +24,9 @@ class App extends Component {
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Welcome to React</h1>
-            <Routes/>
+            <Routes />
           </header>
-          <Route path="/" exact component={ Train } />
+          <Route path="/" exact component={Train} />
         </div>
       </BrowserRouter>
     );

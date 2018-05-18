@@ -1,8 +1,9 @@
-html,body {
-    width: 100%;
-    background-color: #888;
-    text-align: center;
-    height: 100%;
+html,
+body {
+  width: 100%;
+  background-color: #888;
+  text-align: center;
+  height: 100%;
 }
 
 .App {
@@ -36,6 +37,10 @@ html,body {
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
