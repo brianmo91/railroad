@@ -16,6 +16,13 @@ body {
   height: stretch;
 }
 
+.tablets {
+  margin: auto;
+  margin-top: 20px;
+  width: 900px;
+  text-align: left;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
