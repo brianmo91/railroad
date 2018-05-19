@@ -10,7 +10,7 @@ class TrainSelection extends Component {
       { sel: "Morning (6AM-12PM)", name: "MOR" },
       { sel: "Afternoon (12PM-6PM)", name: "AFT" },
       { sel: "Evening (6PM-12AM)", name: "EVE" },
-      { sel: "Midnight (12AM-6PM)", name: "NIT" }
+      { sel: "Midnight (12AM-6AM)", name: "NIT" }
     ];
     let times = timeobj.map(time => (
       <option value={time.name}>{time.sel}</option>
@@ -56,6 +56,9 @@ class TrainSelection extends Component {
                 Date:<br />
                 <DatePicker
                   name="date"
+                  required="true"
+                  minDate={new Date()}
+                  maxDate={new Date("2018-10-24")}
                   onChange={this.props.handleDateChange}
                   value={this.props.date}
                 />
@@ -75,7 +78,11 @@ class TrainSelection extends Component {
             </td>
             <td>
               <br />
-              <input type="submit" value="Find Train" />
+              <input
+                type="submit"
+                value="Find Train"
+                disabled={this.props.disabled}
+              />
             </td>
           </tr>
         </table>
@@ -84,12 +91,35 @@ class TrainSelection extends Component {
   }
 }
 
-class TrainList extends Component {}
+class TrainList extends Component {
+  render() {
+    let traininfo = null;
+    if (this.props.trains) {
+      traininfo = this.props.trains.map(train => (
+        <table border="1" className='tabletl'>
+          <tr>
+            <td colspan="3">Train No. {train.train_id}</td>
+          </tr>
+          <tr>
+            <td>Departure: {train.start_time}</td>
+            <td>Arrival: {train.end_time}</td>
+            <td>Fare: {train.fare}</td>
+          </tr>
+          <tr>
+            <td colspan="3">{train.train_id}</td>
+          </tr>
+        </table>
+      ));
+    }
+    return <div>{traininfo}</div>;
+  }
+}
 
 class Train extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isDisabled: false,
       Stations: [],
       AvailTrains: [],
       date: new Date(),
@@ -125,6 +155,9 @@ class Train extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    if (this.state.stationfrom === this.state.stationto)
+      return alert("Stations cannot be identical");
+    this.setState({ isDisabled: true });
     axios
       .post("/getTrains", {
         date: this.state.date,
@@ -134,8 +167,9 @@ class Train extends Component {
         time: this.state.time
       })
       .then(info => {
-        this.setState({ AvailTrains: info });
+        this.setState({ AvailTrains: info.data });
         console.log(JSON.stringify(this.state.AvailTrains));
+        this.setState({ isDisabled: false });
       })
       .catch(err => console.log(err));
   }
@@ -144,6 +178,7 @@ class Train extends Component {
     return (
       <div>
         <TrainSelection
+          disabled={this.state.isDisabled}
           stations={this.state.Stations}
           date={this.state.date}
           stationfrom={this.state.stationfrom}
@@ -153,6 +188,7 @@ class Train extends Component {
           handleInputChange={this.handleInputChange}
           handleSubmit={this.handleSubmit}
         />
+        <TrainList trains={this.state.AvailTrains} />
       </div>
     );
   }

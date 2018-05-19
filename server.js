@@ -72,14 +72,25 @@ app.post("/getTrains",function(req,res){
     .then(client => {
       client.query(q, function(err, data) {
         if (err) console.error("AVAILTRAINSQ: " + err);
-        if (data) result = data;
         console.log(data);
-        res.send(JSON.stringify(result));
-        mysqlssh.close();
+
+        q = 'select a.train_id, start_station, s1.time_out as start_time, end_station, s2.time_in as end_time, fare';
+        q += ' from avail_trains a left join stops_at s1 on a.train_id=s1.train_id and a.start_station=s1.station_id';
+        q += ' join stops_at s2 on a.train_id=s2.train_id and a.end_station=s2.station_id;';
+        console.log(q);
+
+            client.query(q, function(err, data) {
+              if (err) console.error("AVAILTRAINSQ: " + err);
+              if (data) result = data;
+              console.log(data);
+              res.send(JSON.stringify(result));
+              mysqlssh.close();
+            });
+
       });
     })
     .catch(err => {
-      console.log("AVAILTRAINSC: " + err);
+      console.error("AVAILTRAINSC: " + err);
     });
 });
 

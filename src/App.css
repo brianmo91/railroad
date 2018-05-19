@@ -6,6 +6,23 @@ body {
   height: 100%;
 }
 
+nav {
+  width: 100%;
+  text-align: left;
+  font-size: 25px;
+  margin-left: 25px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover,
+a:active {
+  color: rgb(255, 80, 80);
+}
+
 .App {
   margin: auto;
   background-color: #eee;
@@ -23,31 +40,15 @@ body {
   text-align: left;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.tabletl {
+  margin: auto;
+  margin-top: 20px;
+  width: 800px;
+  text-align: left;
 }
 
 .App-header {
   background-color: #222;
-  height: 150px;
+  height: 30px;
   padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

@@ -8,7 +8,7 @@ class Routes extends Component {
   render() {
     return [
       <nav>
-        <Link to="/">Home</Link>
+        <Link to="/">Home</Link>&emsp;&emsp;
         <Link to="/ticket">Ticket</Link>
       </nav>
     ];
