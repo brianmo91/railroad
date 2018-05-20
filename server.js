@@ -58,6 +58,31 @@ app.get("/stations", function(req, res) {
     });
 });
 
+//Get Checkout Information
+app.get("/getCheckout", function(req, res) {
+  let q = 'select a.train_id, travel_date as date, start_station, st1.station_name as start_name, s1.time_out as start_time, end_station, st2.station_name as end_name, s2.time_in as end_time, fare';
+  q += ' from avail_trains a left join stops_at s1 on a.train_id=s1.train_id and a.start_station=s1.station_id';
+  q += ' join stops_at s2 on a.train_id=s2.train_id and a.end_station=s2.station_id';
+  q += ' join Stations st1 on a.start_station=st1.station_id';
+  q += ' join Stations st2 on a.end_station=st2.station_id';
+  q += ' where chosen=1;'
+  let result = {};
+  console.log("CHECKOUT: " + q);
+  connection()
+    .then(client => {
+      client.query(q, function(err, data) {
+        if (err) console.error("CHECKOUTQUERY: " + err);
+        if (data[0]) result = data[0];
+        console.log('CC: '+JSON.stringify(result));
+        res.send(JSON.stringify(result));
+        mysqlssh.close();
+      });
+    })
+    .catch(err => {
+      console.log("CHECKOUT: " + err);
+    });
+});
+
 //Submit Selection and Get Available Trains
 app.post("/getTrains",function(req,res){
   let date = req.body.date.toString().slice(0,10);
@@ -94,7 +119,24 @@ app.post("/getTrains",function(req,res){
     });
 });
 
+//Select Train to reserve
+app.post("/selectTrain",function(req,res){
+  let q = "update avail_trains set chosen=1 where train_id="+req.body.train_id+";";
+  connection()
+    .then(client => {
+      client.query(q, function(err, data) {
+        if (err) console.error("SELECTTRAIN Q: " + err);
+        console.log('SELECTTRAIN:'+data.info);
+        res.send(JSON.stringify(data));
+        mysqlssh.close();
+      });
+    })
+    .catch(err => {
+      console.log("SELECTTRAIN C: " + err);
+    });
+});
+
 //Listen to Port
-app.listen(3001, function() {
+app.listen(process.env.PORT || 3001, function() {
   console.log("Server running on 3001");
 });

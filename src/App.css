@@ -30,7 +30,14 @@ a:active {
   border-right: 1px solid #222;
   text-align: center;
   width: 1000px;
-  height: stretch;
+  min-height: 700px;
+  padding-bottom: 100px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 30px;
+  padding: 20px;
 }
 
 .tablets {
@@ -47,8 +54,5 @@ a:active {
   text-align: left;
 }
 
-.App-header {
-  background-color: #222;
-  height: 30px;
-  padding: 20px;
+.thead {
 }
