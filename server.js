@@ -83,6 +83,30 @@ app.get("/getCheckout", function(req, res) {
     });
 });
 
+app.post("/purchaseTicket",function(req,res){
+  let f_name = req.body.f_name;
+  let l_name = req.body.l_name;
+  let address = req.body.address;
+  let email = req.body.email;
+  let fare = req.body.fare;
+  let discounttype = req.body.discounttype;
+  let pet = req.body.pet;
+  let q = "call get_ticket('"+f_name+"','"+l_name+"','credit','"+address+"','"+email+"',"+fare+",'"+discounttype+"',"+pet+",@trip_ok);";
+  console.log(q);
+  connection()
+    .then(client => {
+      client.query(q, function(err, data) {
+        if (err) console.error("PURCHASE Q: " + err);
+        console.log('PURCHASE:'+JSON.stringify(data));
+        res.send(JSON.stringify(data));
+        mysqlssh.close();
+      });
+    })
+    .catch(err => {
+      console.log("PURCHASE C: " + err);
+    });
+});
+
 //Submit Selection and Get Available Trains
 app.post("/getTrains",function(req,res){
   let date = req.body.date.toString().slice(0,10);

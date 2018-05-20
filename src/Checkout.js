@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 
@@ -7,6 +7,10 @@ class TicketInfo extends Component {
   render() {
     let t = this.props.ticket;
     let date = moment(t.date).format('M/D/YYYY');
+    let fare = Number(t.fare);
+    let addpet = (this.props.pet==1?25:0);
+    let disct = this.props.discount.pct;
+    let totalfare = (fare+addpet)*disct;
     return (
       <div>
         <form onSubmit={this.props.onSubmit}>
@@ -20,10 +24,10 @@ class TicketInfo extends Component {
                   Discount:<br />
                   <select style={{ width: "200px" }} name="Discount" value={JSON.stringify(this.props.discount)} onChange={this.props.onD}>
                     <option value={JSON.stringify({pct: 1.0, type: null})} label="--None--" />
-                    <option value={JSON.stringify({pct: 0.8, type: "Military (20%)"})} label="Military (20%)" />
-                    <option value={JSON.stringify({pct: 0.8, type: "Senior (20%)"})} label="Senior (20%)" />
-                    <option value={JSON.stringify({pct: 0.8, type: "Handicapped (20%)"})} label="Handicapped (20%)" />
-                    <option value={JSON.stringify({pct: 0.8, type: "Child (20%)"})} label="Child (20%)" />
+                    <option value={JSON.stringify({pct: 0.9, type: "Military (10%)"})} label="Military (10%)" />
+                    <option value={JSON.stringify({pct: 0.9, type: "Senior, Age: 65+ (10%)"})} label="Senior, Age: 65+ (10%)" />
+                    <option value={JSON.stringify({pct: 0.9, type: "Handicapped (10%)"})} label="Handicapped (10%)" />
+                    <option value={JSON.stringify({pct: 0.5, type: "Child, Age: 2-12 (50%)"})} label="Child, Age: 2-12 (50%)" />
                   </select>
                 </label>
               </td>
@@ -56,7 +60,7 @@ class TicketInfo extends Component {
               <td>
                 <b>Arrival:</b> {moment(t.end_time, "HH:mm:ss").format("h:mm a")}
               </td>
-              <td><b>Fare:</b> ${t.fare}</td>
+              <td><b>Fare:</b> ${totalfare.toFixed(2)}</td>
             </tr>
           </table>
         </form>
@@ -77,20 +81,20 @@ class PaymentInfo extends Component {
             </tr>
             <tr>
               <td width='215'><label>First Name<br/>
-                <input type="text" name='f_name' size='26' value={p.f_name} onChange={(e)=>this.props.onP(e)} required/>
+                <input type="text" name='f_name' size='26' maxlength='20' value={p.f_name} onChange={(e)=>this.props.onP(e)} required/>
               </label></td>
               <td><label>Last Name<br/>
-                <input type="text" name='l_name' size='26' value={p.l_name} onChange={(e)=>this.props.onP(e)} required/>
+                <input type="text" name='l_name' size='26' maxlength='20' value={p.l_name} onChange={(e)=>this.props.onP(e)} required/>
               </label></td>
             </tr>
             <tr>
               <td colspan='2'><label>Address<br/>
-                <input type="text" name='address' size='60' value={p.address} onChange={(e)=>this.props.onP(e)} required/>
+                <input type="text" name='address' size='50' maxlength='50' value={p.address} onChange={(e)=>this.props.onP(e)} required/>
               </label></td>
             </tr>
             <tr>
               <td colspan='2'><label>E-mail<br/>
-                <input type="text" name='email' size='35' maxlength='15' value={p.email} onChange={(e)=>this.props.onP(e)} required/>
+                <input type="email" name='email' size='35' maxlength='50' value={p.email} onChange={(e)=>this.props.onP(e)} required/>
               </label></td>
             </tr>
             <tr>
@@ -108,7 +112,7 @@ class PaymentInfo extends Component {
             </tr>
             <tr>
               <td colspan='2' valign='bottom' align='right' height='30px'>
-                <input name='submit' type="submit" value='Purchase Ticket'/>
+                <input name='submit' type="submit" value='Purchase Ticket' disabled={this.props.disable}/>
               </td>
             </tr>
           </table>
@@ -122,7 +126,8 @@ class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      toReceipt: false,
+      isPurDisabled: false,
+      toPurchased: false,
       Ticket: {},
       Pet: 0,
       Discount: {pct: 1.0, type: null},
@@ -148,14 +153,23 @@ class Checkout extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({ isSelDisabled: true });
-    console.log("SELECTION: " + event.target[0].value);
+    this.setState({ isPurDisabled: true });
+    let fare = Number(this.state.Ticket.fare);
+    let addpet = (this.state.Pet==1?25:0);
+    let disct = this.state.Discount.pct;
+    let totalfare = (fare+addpet)*disct;
     axios
       .post("/purchaseTicket", {
-        train_id: event.target[0].value
+        f_name: this.state.PayInfo.f_name,
+        l_name: this.state.PayInfo.l_name,
+        address: this.state.PayInfo.address,
+        email: this.state.PayInfo.email,
+        fare: totalfare,
+        discounttype: this.state.Discount.type,
+        pet: this.state.Pet
       })
       .then(info => {
-        this.setState({ toReceipt: true });
+        this.setState({ toPurchased: true });
       })
       .catch(err => console.log(err));
   }
@@ -184,10 +198,14 @@ class Checkout extends Component {
   }
 
   render() {
+    if (this.state.toPurchased === true) {
+      document.getElementById('head').scrollIntoView();
+      return <Redirect to="/Purchased" />;
+    }
     return (
       <div>
         <TicketInfo discount={this.state.Discount} pet={this.state.Pet} ticket={this.state.Ticket} onT={this.handleTicketChange} onD={this.handleDiscountChange}/>
-        <PaymentInfo payinfo={this.state.PayInfo} onP={this.handlePayChange} onSubmit={this.handleSubmit}/>
+        <PaymentInfo payinfo={this.state.PayInfo} onP={this.handlePayChange} onSubmit={this.handleSubmit} disable={this.state.isPurDisabled}/>
       </div>
     );
   }

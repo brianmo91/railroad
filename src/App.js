@@ -5,6 +5,7 @@ import "./App.css";
 import Train from "./Train";
 import Checkout from "./Checkout";
 import Tickets from "./Tickets";
+import Purchased from "./Purchased";
 
 class Routes extends Component {
   render() {
@@ -22,11 +23,12 @@ class App extends Component {
     return [
       <BrowserRouter>
         <div className="App">
-          <header className="App-header">
+          <header className="App-header" id='head'>
             <Routes />
           </header>
           <Route path="/" exact component={Train} />
           <Route path="/Checkout" exact component={Checkout} />
+          <Route path="/Purchased" exact component={Purchased} />
           <Route path="/Tickets" exact component={Tickets} />
         </div>
       </BrowserRouter>,
