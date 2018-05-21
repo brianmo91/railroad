@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "concurrently": "^3.5.1",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "moment": "^2.22.1",
@@ -19,7 +20,8 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently --allow-restart --restart-after 2500 --restart-tries 100 \"node server.js\" \"npm run reactstart\"",
+    "reactstart": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

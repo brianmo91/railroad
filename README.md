@@ -1,6 +1,9 @@
 # railroad
 CSC336 Project
 
+How to Navigate:
+
+Not Necessary to Fill In Credit Card Information, since there is no actual payment service.
 
 Pricing of Purchase Date to Trip Date
 
