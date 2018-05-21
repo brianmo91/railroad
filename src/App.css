@@ -23,6 +23,16 @@ a:active {
   color: rgb(255, 80, 80);
 }
 
+.a2 {
+  color: rgb(0,0,0);
+}
+
+.a2:hover,
+.a2:active {
+  color: rgb(255,0,0);
+}
+
+
 .App {
   margin: auto;
   background-color: #eee;
@@ -40,17 +50,82 @@ a:active {
   padding: 20px;
 }
 
+.container{
+  margin-top: 20px;
+  //border: 1px solid;
+}
+
+.purchased{
+  margin-top: 100px;
+}
+
+.tdc{
+  background-color: #222;
+  color: white;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.l{
+  padding-left: 10px;
+}
+
+.t{
+  padding-top: 15px;
+}
+
+.b{
+  padding-bottom: 10px;
+}
+
+.ti{
+  padding-right: 12px;
+}
+
+.r{
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  text-align: right;
+}
+
+.lcol{
+  width: 130px;
+}
+
+.selbutton{
+  margin-right: 13px;
+  width: 80px;
+}
+
+.cancelbutton{
+  margin-right: 13px;
+  width: 150px;
+}
+
+.fare{
+  color: rgb(0,0,0);
+}
+
 .tablets {
   margin: auto;
-  margin-top: 20px;
   width: 900px;
   text-align: left;
 }
 
 .tabletl {
   margin: auto;
-  margin-top: 20px;
+  margin-top: 60px;
   width: 800px;
+  text-align: left;
+  border: 1.9px solid #222;
+  border-collapse: separate;
+}
+
+.tableticket {
+  margin: auto;
+  margin-top: 20px;
   text-align: left;
 }
 

@@ -14,12 +14,12 @@ class TicketInfo extends Component {
     return (
       <div>
         <form onSubmit={this.props.onSubmit}>
-          <table border='1' className='tabletl'>
+          <table border='0' className='tabletl'>
             <tr>
-              <td colspan='2'>Ticket Information</td>
+              <td colspan='2' className='tdc'>Ticket Information</td>
             </tr>
             <tr>
-              <td>
+              <td className="l t">
                 <label>
                   Discount:<br />
                   <select style={{ width: "200px" }} name="Discount" value={JSON.stringify(this.props.discount)} onChange={this.props.onD}>
@@ -31,7 +31,7 @@ class TicketInfo extends Component {
                   </select>
                 </label>
               </td>
-              <td>
+              <td className="t">
                 <label>
                   Pet:<br />
                   <select style={{ width: "200px" }} name="Pet" value={this.props.pet} onChange={this.props.onT}>
@@ -42,25 +42,29 @@ class TicketInfo extends Component {
               </td>
             </tr>
             <tr>
-              <td colspan='2'>
+              <td colspan='2' className="l t ti">
                 <hr/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan='2' className="l t ti">
                 <b>From:</b> {t.start_name} &emsp;<b>To:</b> {t.end_name}
               </td>
             </tr>
             <tr>
-              <td colspan="2"><b>Train No. {t.train_id}</b></td>
+              <td colspan="2" className="l t"><b>Train No. {t.train_id}</b></td>
             </tr>
             <tr>
-              <td>
+              <td className="l t">
                 <b>Departure:</b> <span style={{textAlign:'right'}}>{moment(t.start_time, "HH:mm:ss").format("h:mm a")}</span>
               </td>
-              <td><b>Date:</b> {date}</td>
+              <td className="t"><b>Date:</b> {date}</td>
             </tr>
             <tr>
-              <td>
+              <td className="l t b">
                 <b>Arrival:</b> {moment(t.end_time, "HH:mm:ss").format("h:mm a")}
               </td>
-              <td><b>Fare:</b> ${totalfare.toFixed(2)}</td>
+              <td className="t b"><b>Fare:</b> <span className='fare'>${totalfare.toFixed(2)}</span></td>
             </tr>
           </table>
         </form>
@@ -75,44 +79,45 @@ class PaymentInfo extends Component {
     return (
       <div>
         <form onSubmit={this.props.onSubmit}>
-          <table border='1' className='tabletl'>
+          <table border='0' className='tabletl'>
             <tr>
-              <td colspan='2'>Payment Information</td>
+              <td colspan='2' className='tdc'>Payment Information</td>
             </tr>
             <tr>
-              <td width='215'><label>First Name<br/>
-                <input type="text" name='f_name' size='26' maxlength='20' value={p.f_name} onChange={(e)=>this.props.onP(e)} required/>
+              <td width='290' className="l t"><label>First Name<br/>
+                <input type="text" name='f_name' size='35' maxlength='20' value={p.f_name} onChange={(e)=>this.props.onP(e)} required/>
               </label></td>
-              <td><label>Last Name<br/>
-                <input type="text" name='l_name' size='26' maxlength='20' value={p.l_name} onChange={(e)=>this.props.onP(e)} required/>
+              <td className="t"><label>Last Name<br/>
+                <input type="text" name='l_name' size='35' maxlength='20' value={p.l_name} onChange={(e)=>this.props.onP(e)} required/>
               </label></td>
             </tr>
             <tr>
-              <td colspan='2'><label>Address<br/>
+              <td colspan='2' className="l t"><label>Address<br/>
                 <input type="text" name='address' size='50' maxlength='50' value={p.address} onChange={(e)=>this.props.onP(e)} required/>
               </label></td>
             </tr>
             <tr>
-              <td colspan='2'><label>E-mail<br/>
+              <td colspan='2' className="l t"><label>E-mail<br/>
                 <input type="email" name='email' size='35' maxlength='50' value={p.email} onChange={(e)=>this.props.onP(e)} required/>
               </label></td>
             </tr>
             <tr>
-              <td style={{paddingTop:'40px'}}><label>Card Number<br/>
+              <td style={{paddingTop:'40px'}} className="l t"><label>Card Number<br/>
                 <input type="text" name='creditNum' size='26' maxlength='16' />
               </label></td>
-              <td style={{paddingTop:'40px'}}><label>Exp Date(mm/yy)<br/>
+              <td style={{paddingTop:'40px'}} className="t"><label>Exp Date(mm/yy)<br/>
                 <input type="text" name='expiration' size='17' maxlength='5' />
               </label></td>
             </tr>
             <tr>
-              <td><label>CCV<br/>
+              <td colspan='2' className="l t"><label>CCV<br/>
                 <input type="text" name='ccv' size='3' maxlength='3' />
               </label></td>
             </tr>
             <tr>
-              <td colspan='2' valign='bottom' align='right' height='30px'>
-                <input name='submit' type="submit" value='Purchase Ticket' disabled={this.props.disable}/>
+              <td colspan='2' className="r">
+                <hr/>
+                <input name='submit' className="cancelbutton" type="submit" value='Purchase Ticket' disabled={this.props.disable}/>
               </td>
             </tr>
           </table>
@@ -203,7 +208,7 @@ class Checkout extends Component {
       return <Redirect to="/Purchased" />;
     }
     return (
-      <div>
+      <div className='container'>
         <TicketInfo discount={this.state.Discount} pet={this.state.Pet} ticket={this.state.Ticket} onT={this.handleTicketChange} onD={this.handleDiscountChange}/>
         <PaymentInfo payinfo={this.state.PayInfo} onP={this.handlePayChange} onSubmit={this.handleSubmit} disable={this.state.isPurDisabled}/>
       </div>

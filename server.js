@@ -65,7 +65,7 @@ app.get("/getCheckout", function(req, res) {
   q += ' join stops_at s2 on a.train_id=s2.train_id and a.end_station=s2.station_id';
   q += ' join Stations st1 on a.start_station=st1.station_id';
   q += ' join Stations st2 on a.end_station=st2.station_id';
-  q += ' where chosen=1;'
+  q += ' where chosen=1;';
   let result = {};
   console.log("CHECKOUT: " + q);
   connection()
@@ -83,6 +83,52 @@ app.get("/getCheckout", function(req, res) {
     });
 });
 
+//Get Tickets to View
+app.post("/viewTickets",function(req,res){
+  let result = [];
+  let q = "select trip_id, st1.station_name as start_name, st2.station_name as end_name, trip_train as train_id,"
+  q += " s1.time_out as start_time, s2.time_in as end_time, trip_date as date, fare, discounttype, pet,p.passenger_fname as f_name,p.passenger_lname as l_name"
+  q += " from Tickets tk inner join stops_at s1 on tk.trip_train=s1.train_id and tk.trip_starts=s1.station_id"
+  q += " inner join stops_at s2 on tk.trip_train=s2.train_id and tk.trip_ends=s2.station_id"
+  q += " inner join Stations st1 on tk.trip_starts=st1.station_id"
+  q += " inner join Stations st2 on tk.trip_ends=st2.station_id"
+  q += " inner join Passengers p on tk.passenger_id=p.passenger_id"
+  q += " where p.passenger_email='"+req.body.email+"' and tk.cancelled=0 and tk.trip_date >= curdate();";
+  console.log('ViewTickets: '+q);
+  connection()
+    .then(client => {
+      client.query(q, function(err, data) {
+        if (err) console.error("VIEWTICKETS Q: " + err);
+        if (data) result=data;
+        res.send(JSON.stringify(result));
+        mysqlssh.close();
+      });
+    })
+    .catch(err => {
+      console.log("VIEWTICKETS C: " + err);
+    });
+});
+
+//Cancel Ticket
+app.post("/cancelTicket",function(req,res){
+  let trip_id = req.body.trip_id;
+  let q = "call cancel_ticket("+trip_id+");";
+  console.log(q);
+  connection()
+    .then(client => {
+      client.query(q, function(err, data) {
+        if (err) console.error("CANCEL Q: " + err);
+        console.log('CANCEL:'+JSON.stringify(data));
+        res.end();
+        mysqlssh.close();
+      });
+    })
+    .catch(err => {
+      console.log("CANCEL C: " + err);
+    });
+});
+
+//Purchase Ticket
 app.post("/purchaseTicket",function(req,res){
   let f_name = req.body.f_name;
   let l_name = req.body.l_name;
@@ -122,20 +168,17 @@ app.post("/getTrains",function(req,res){
       client.query(q, function(err, data) {
         if (err) console.error("AVAILTRAINSQ: " + err);
         console.log(data);
-
         q = 'select a.train_id, start_station, s1.time_out as start_time, end_station, s2.time_in as end_time, fare';
         q += ' from avail_trains a left join stops_at s1 on a.train_id=s1.train_id and a.start_station=s1.station_id';
         q += ' join stops_at s2 on a.train_id=s2.train_id and a.end_station=s2.station_id;';
         console.log(q);
-
-            client.query(q, function(err, data) {
-              if (err) console.error("AVAILTRAINSQ: " + err);
-              if (data) result = data;
-              console.log(data);
-              res.send(JSON.stringify(result));
-              mysqlssh.close();
-            });
-
+        client.query(q, function(err, data) {
+          if (err) console.error("AVAILTRAINSQ: " + err);
+          if (data) result = data;
+          console.log(data);
+          res.send(JSON.stringify(result));
+          mysqlssh.close();
+        });
       });
     })
     .catch(err => {
