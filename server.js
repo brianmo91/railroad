@@ -47,7 +47,7 @@ app.get("/stations", function(req, res) {
   connection()
     .then(client => {
       client.query(q, function(err, data) {
-        if (err) console.error("STATIONQUERY: " + err);
+        if (err) console.log("STATIONQUERY: " + err);
         if (data) result = data;
         res.send(JSON.stringify(result));
         mysqlssh.close();

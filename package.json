@@ -20,8 +20,9 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "start": "concurrently --allow-restart --restart-after 2500 --restart-tries 100 \"node server.js\" \"npm run reactstart\"",
+    "start": "concurrently \"npm run server\" \"npm run reactstart\"",
     "reactstart": "react-scripts start",
+    "server": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
