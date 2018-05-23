@@ -121,6 +121,7 @@ a:active {
   text-align: left;
   border: 1.9px solid #222;
   border-collapse: separate;
+  background-color: #fff;
 }
 
 .tableticket {

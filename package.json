@@ -7,10 +7,14 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "concurrently": "^3.5.1",
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.1",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "moment": "^2.22.1",
     "mysql-ssh": "^1.0.6",
+    "nodemon": "^1.17.4",
+    "npm": "^6.0.1",
     "react": "^16.3.2",
     "react-confirm-alert": "^2.0.2",
     "react-date-picker": "^6.10.1",
@@ -25,6 +29,7 @@
     "server": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently \"npm run server\" \"npm run reactstart\""
   }
 }

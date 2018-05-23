@@ -1,11 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require('path');
 const app = express();
 const React = require("react");
 const mysqlssh = require("mysql-ssh");
 const config = require("./config.js"); //import connection data
+var cors = require('cors');
 
-app.use(express.static(__dirname + "/public"));
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -39,6 +42,9 @@ connection()
   .catch(err => {
     console.log(err);
   });
+
+
+
 
 //Get Stations
 app.get("/stations", function(req, res) {
@@ -204,6 +210,6 @@ app.post("/selectTrain",function(req,res){
 });
 
 //Listen to Port
-app.listen(process.env.PORT || 3001, function() {
+app.listen(3001, function() {
   console.log("Server running on 3001");
 });
