@@ -210,6 +210,6 @@ app.post("/selectTrain",function(req,res){
 });
 
 //Listen to Port
-app.listen(3001, function() {
+app.listen(process.env.PORT || 3001, function() {
   console.log("Server running on 3001");
 });
