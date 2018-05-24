@@ -1,8 +1,11 @@
 {
   "name": "railroad",
-  "version": "0.1.0",
-  "private": true,
-  "proxy": "http://localhost:3001",
+  "version": "1.0.0",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "node server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
@@ -11,25 +14,8 @@
     "dotenv": "^5.0.1",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "moment": "^2.22.1",
     "mysql-ssh": "^1.0.6",
     "nodemon": "^1.17.4",
-    "npm": "^6.0.1",
-    "react": "^16.3.2",
-    "react-confirm-alert": "^2.0.2",
-    "react-date-picker": "^6.10.1",
-    "react-datepicker": "^1.4.1",
-    "react-dom": "^16.3.2",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4"
-  },
-  "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run reactstart\"",
-    "reactstart": "react-scripts start",
-    "server": "node server.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "dev": "concurrently \"npm run server\" \"npm run reactstart\""
+    "npm": "^6.0.1"
   }
 }

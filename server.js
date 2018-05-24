@@ -2,13 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require('path');
 const app = express();
-const React = require("react");
 const mysqlssh = require("mysql-ssh");
 const config = require("./config.js"); //import connection data
 var cors = require('cors');
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
