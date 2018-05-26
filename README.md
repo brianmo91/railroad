@@ -12,10 +12,9 @@
 | 5 days | 1.1x Fare  |
 | 6+ days | 1.0x Fare |
 
-
 <br/>
-### How to Navigate
 
+### How to Navigate
 1. Choose a Station From, Station To, Date, and Time range for your desired trip.
 2. Click on 'Find Train' and then 'Select' from the list of available trains.
 3. Option to choose a 'Discount' and whether to add a 'Pet'.
