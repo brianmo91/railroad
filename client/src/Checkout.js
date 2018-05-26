@@ -175,6 +175,7 @@ class Checkout extends Component {
       })
       .then(info => {
         this.setState({ toPurchased: true });
+        this.props.onUnlock();
       })
       .catch(err => console.log(err));
   }

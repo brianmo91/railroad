@@ -142,6 +142,11 @@ class Tickets extends Component {
     this.handleCancel2 = this.handleCancel2.bind(this);
   }
 
+  componentDidMount(){
+    if (this.props.isLocked)
+      this.props.onUnlock();
+  }
+
   handleEmail(e) {
     this.setState({ email: e.target.value });
   }

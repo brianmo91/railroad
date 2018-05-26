@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "client": "cd client && npm start",
-    "server": "node server.js",
+    "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {
+    "ajax": "0.0.4",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "concurrently": "^3.5.1",
@@ -14,7 +15,10 @@
     "dotenv": "^5.0.1",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
+    "locks": "^0.2.2",
+    "mutex": "^1.0.4",
     "mysql-ssh": "^1.0.6",
+    "node-mutex": "^0.2.2",
     "nodemon": "^1.17.4",
     "npm": "^6.0.1"
   }

@@ -97,36 +97,52 @@ class TrainList extends Component {
   render() {
     let traininfo = null;
     if (this.props.trains) {
-      traininfo = this.props.trains.map(train => (
-        <table border="0" className="tabletl">
-          <tr>
-            <td colspan="3" className='tdc'>Train No. {train.train_id}</td>
-          </tr>
-          <tr>
-            <td className='t l' width="320px">
-              <b>Departure: </b>{moment(train.start_time, "HH:mm:ss").format("h:mm a")}
-            </td>
-            <td className='t'>
-              <b>Arrival: </b>{moment(train.end_time, "HH:mm:ss").format("h:mm a")}
-            </td>
-            <td className='t lcol'><b>Fare: </b>${train.fare}</td>
-          </tr>
-          <tr>
-            <td colspan='3' className='r'>
-              <hr/>
-              <form onSubmit={this.props.handleSelect}>
-                <input type="hidden" name="train_id" value={train.train_id} />
-                <input
-                  type="submit"
-                  className="selbutton"
-                  disabled={this.props.disabled}
-                  value="Select"
-                />
-              </form>
-            </td>
-          </tr>
-        </table>
-      ));
+      if (this.props.trains[0] === 'timedout')
+        traininfo = (
+          <table border="0" className="tabletl">
+            <tr>
+              <td className='tdc'>System Locked</td>
+            </tr>
+            <tr>
+              <td className='t l b' align='center'>
+                <h2>Sorry, The Reservation System is Currently In Use.<br/>
+                Please Try Again Later.</h2>
+              </td>
+            </tr>
+          </table>
+        );
+      else
+        traininfo = this.props.trains.map(train => (
+          <table border="0" className="tabletl">
+            <tr>
+              <td colspan="3" className='tdc'>Train No. {train.train_id}</td>
+            </tr>
+            <tr>
+              <td className='t l' width="320px">
+                <b>Departure: </b>{moment(train.start_time, "HH:mm:ss").format("h:mm a")}
+              </td>
+              <td className='t'>
+                <b>Arrival: </b>{moment(train.end_time, "HH:mm:ss").format("h:mm a")}
+              </td>
+              <td className='t lcol'><b>Fare: </b>${train.fare}</td>
+            </tr>
+            <tr>
+              <td colspan='3' className='r'>
+                <hr/>
+                <form onSubmit={this.props.handleSelect}>
+                  <input type="hidden" name="train_id" value={train.train_id} />
+                  <input
+                    type="submit"
+                    className="selbutton"
+                    disabled={this.props.disabled}
+                    value="Select"
+                  />
+                </form>
+              </td>
+            </tr>
+          </table>
+        )
+      );
     }
 
     return <div>{traininfo}</div>;
@@ -139,6 +155,7 @@ class Train extends Component {
     this.state = {
       toCheckout: false,
       isDisabled: false,
+      isLocked: false,
       Stations: [],
       AvailTrains: [],
       date: new Date(),
@@ -178,8 +195,10 @@ class Train extends Component {
     if (this.state.stationfrom === this.state.stationto)
       return alert("Stations cannot be identical");
     this.setState({ isDisabled: true });
+
+    let url = (this.state.isLocked ? "/getTrains2" : "/getTrains")
     axios
-      .post("/getTrains", {
+      .post(url, {
         date: this.state.date,
         day: this.state.day,
         stationfrom: this.state.stationfrom,
@@ -188,8 +207,11 @@ class Train extends Component {
       })
       .then(info => {
         this.setState({ AvailTrains: info.data });
-        console.log(JSON.stringify(this.state.AvailTrains));
         this.setState({ isDisabled: false });
+        if (info.data[0] != 'timedout'){
+          this.setState({ isLocked: true });
+          this.props.onLock();
+        }
       })
       .catch(err => console.log(err));
   }
@@ -213,8 +235,10 @@ class Train extends Component {
       document.getElementById('head').scrollIntoView();
       return <Redirect to="/Checkout" />;
     }
+
     return (
       <div className='container'>
+
         <TrainSelection
           disabled={this.state.isDisabled}
           stations={this.state.Stations}
