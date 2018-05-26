@@ -13,7 +13,7 @@
 | 6+ days | 1.0x Fare |
 
 
-<br/><br/>
+<br/>
 ### How to Navigate
 
 1. Choose a Station From, Station To, Date, and Time range for your desired trip.
